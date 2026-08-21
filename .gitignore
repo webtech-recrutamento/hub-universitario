@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Frontend build and test output
+apps/frontend/dist/
+apps/frontend/coverage/
+apps/frontend/.vite/
+
+# Backend build output
+apps/backend/target/
+
+# Local environment and runtime files
+.env
+.env.*
+!.env.example
+*.log
+
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Operating system files
+.DS_Store
+Thumbs.db
