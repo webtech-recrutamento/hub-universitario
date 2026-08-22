@@ -8,6 +8,7 @@ import br.edu.hub.repository.ActivityRepository;
 import br.edu.hub.repository.RegistrationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import br.edu.hub.exception.ActivityFullException;
 
 import java.util.List;
 
@@ -24,10 +25,13 @@ public class RegistrationService {
         this.activityRepository = activityRepository;
         this.activityService = activityService;
     }
-
-    @Transactional
+//alteracao princpal para correçao do problema
+        @Transactional
     public RegistrationResponse register(Long activityId, RegistrationRequest request) {
         Activity activity = activityService.requireActivity(activityId);
+        if (activity.getRegisteredCount() >= activity.getCapacity()) {
+            throw new ActivityFullException("Activity is full");
+        }
         Registration registration = registrationRepository.save(
                 new Registration(activity, request.studentName(), request.studentEmail())
         );

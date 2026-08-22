@@ -21,10 +21,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest()
                 .body(new ErrorResponse("Validation failed", LocalDateTime.now(), errors));
     }
+// alterações para controle de lotação e data dos eventos
+    @ExceptionHandler(ActivityNotFoundException.class)
+    ResponseEntity<ErrorResponse> handleActivityNotFound(ActivityNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.of(exception.getMessage()));
+    }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ActivityFullException.class)
+    ResponseEntity<ErrorResponse> handleActivityFull(ActivityFullException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.of(exception.getMessage()));
     }
 }
