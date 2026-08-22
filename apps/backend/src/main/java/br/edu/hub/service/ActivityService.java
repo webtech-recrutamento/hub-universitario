@@ -30,7 +30,7 @@ public class ActivityService {
                             || containsNormalized(activity.getDescription(), term))
                     .toList();
         } else {
-            activities = activityRepository.findAllByOrderByDateDesc();
+            activities = activityRepository.findAllByOrderByDateAsc();
         }
 
         return activities.stream()
