@@ -19,7 +19,7 @@ public class ActivityService {
 
     @Transactional(readOnly = true)
     public List<ActivityResponse> list(String search) {
-        return activityRepository.findAllByOrderByDateDesc().stream()
+        return activityRepository.findAllByOrderByDateAsc().stream()
                 .map(ActivityResponse::from)
                 .toList();
     }
