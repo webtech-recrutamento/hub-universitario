@@ -41,13 +41,24 @@ class ActivityControllerTest {
         fullActivity = activityRepository.save(new Activity(
                 "Curso lotado", "Uma atividade lotada para os testes.", ActivityCategory.COURSE,
                 ActivityStatus.FULL, 1, 1, "Equipe Hub", "Lab 2", LocalDateTime.now().plusDays(3)));
+        activityRepository.save(new Activity(
+                "Encontro cultural", "Sessão comentada de cinema brasileiro.", ActivityCategory.EVENT,
+                ActivityStatus.OPEN, 20, 0, "Equipe Hub", "Auditório", LocalDateTime.now().plusDays(4)));
     }
 
     @Test
     void shouldListActivities() throws Exception {
         mockMvc.perform(get("/api/activities"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(3)));
+    }
+
+    @Test
+    void shouldFindAccentuatedTextWhenSearchTermHasNoAccent() throws Exception {
+        mockMvc.perform(get("/api/activities").param("search", "sessao"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title").value("Encontro cultural"));
     }
 
     @Test
