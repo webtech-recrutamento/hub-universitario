@@ -25,7 +25,7 @@ public class ActivityService {
 
         if (search != null && !search.isBlank()) {
             String term = normalize(search);
-            activities = activityRepository.findAllByOrderByDateDesc().stream()
+            activities = activityRepository.findAllByOrderByDateAsc().stream()
                     .filter(activity -> containsNormalized(activity.getTitle(), term)
                             || containsNormalized(activity.getDescription(), term))
                     .toList();
