@@ -27,4 +27,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.of(exception.getMessage()));
     }
+
+    @ExceptionHandler(DuplicateRegistrationException.class)
+ResponseEntity<ErrorResponse> handleDuplicateRegistration(DuplicateRegistrationException exception) {
+    return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ErrorResponse.of(exception.getMessage()));
+}
 }
