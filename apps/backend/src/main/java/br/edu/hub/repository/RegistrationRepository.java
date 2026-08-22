@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
     List<Registration> findByActivityIdOrderByCreatedAtAsc(Long activityId);
+    boolean existsByActivityIdAndStudentEmail(Long activityId, String studentEmail);
 }
