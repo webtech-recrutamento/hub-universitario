@@ -1,8 +1,10 @@
 import { api } from './api'
 import type { Activity, Registration, RegistrationInput } from '../types/activity'
 
-export async function getActivities(_search = ''): Promise<Activity[]> {
-  const response = await api.get<Activity[]>('/activities')
+export async function getActivities(search = ''): Promise<Activity[]> {
+  const response = await api.get<Activity[]>('/activities', {
+    params: search ? { search }: undefined,
+  })
   return response.data
 }
 
