@@ -7,7 +7,9 @@ import br.edu.hub.repository.ActivityRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.Normalizer;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class ActivityService {
@@ -22,8 +24,11 @@ public class ActivityService {
         List<Activity> activities;
 
         if (search != null && !search.isBlank()) {
-            String term = search.trim();
-            activities = activityRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrderByDateDesc(term, term);
+            String term = normalize(search);
+            activities = activityRepository.findAllByOrderByDateDesc().stream()
+                    .filter(activity -> containsNormalized(activity.getTitle(), term)
+                            || containsNormalized(activity.getDescription(), term))
+                    .toList();
         } else {
             activities = activityRepository.findAllByOrderByDateDesc();
         }
@@ -31,6 +36,16 @@ public class ActivityService {
         return activities.stream()
                 .map(ActivityResponse::from)
                 .toList();
+    }
+
+    private boolean containsNormalized(String value, String term) {
+        return normalize(value).contains(term);
+    }
+
+    private String normalize(String value) {
+        return Normalizer.normalize(value.trim(), Normalizer.Form.NFD)
+                .replaceAll("\\p{M}+", "")
+                .toLowerCase(Locale.ROOT);
     }
 
     @Transactional(readOnly = true)
